@@ -41,6 +41,9 @@ def mostrar_status():
     match(resposta):
         case _:
             os.system("cls")
+            print(f"dinheiro: R${dinheiro:.2f} \n") 
+            print(figuras)
+
             gamble()
 
 def gamble():
@@ -55,54 +58,59 @@ def gamble():
 
     match(resposta.lower()):
         case "s":
-            giros_status += 1
-            for _ in figuras:
-                figuras_choice.append(random.choice(figuras))
+            if dinheiro > 0:
+                giros_status += 1
 
-            contagem = set(figuras_choice)
-            mensagem = ""
+                for _ in figuras:
+                    figuras_choice.append(random.choice(figuras))
 
-            if len(contagem) == 3:
-                ganho = 5
-                perdas_status += ganho
-                dinheiro -= ganho
+                contagem = set(figuras_choice)
+                mensagem = ""
 
-                mensagem = f"nao foi dessa vez, tente novamente! quem não joga não recupera! -{ganho:.2f} \n"
+                if len(contagem) == 3:
+                    ganho = 3
+                    perdas_status += ganho
+                    dinheiro -= ganho
 
-                print(figuras_choice, "\n" , mensagem)
-            elif len(contagem) == 2:
-                ganho = 0.5
-                ganhos_status += ganho
-                dinheiro += ganho
+                    mensagem = f"nao foi dessa vez, tente novamente! quem não joga não recupera! -{ganho:.2f} \n"
 
-                mensagem = f"quase! voce esta com sorte! ganho normal! +{ganho:.2f} \n"
+                    print(figuras_choice, "\n" , mensagem)
+                elif len(contagem) == 2:
+                    ganho = 0.5
+                    ganhos_status += ganho
+                    dinheiro += ganho
+
+                    mensagem = f"quase! voce esta com sorte! ganho normal! +{ganho:.2f} \n"
+                else:
+                    ganho = 3
+                    ganhos_status += ganho
+                    dinheiro += ganho
+
+                    mensagem = f"tirou a sorte grande, grande ganho! +{ganho:.2f} \n"
+            
+                #bloco que vai ser exibido no terminal 
+                os.system("cls")
+                print(f"dinheiro: R${dinheiro:.2f} \n") 
+                print(figuras_choice, "\n\n" , mensagem)
+            
+                resposta = input("deseja jogar novamente? ( s / n / status ) ")
+
+            
+                match(resposta.lower()):
+                    case "s":
+                        os.system("cls")
+                        gamble()
+                    case "status":
+                        mostrar_status()
+                    case "n":
+                        print("fim do programa!")
+                    case _:
+                        os.system("cls")
+                        print("digite uma resposta valida!\n")
+                        gamble()
             else:
-                ganho = 3
-                ganhos_status += ganho
-                dinheiro += ganho
-
-                mensagem = f"tirou a sorte grande, grande ganho! +{ganho:.2f} \n"
-            
-            #bloco que vai ser exibido no terminal 
-            os.system("cls")
-            print(f"dinheiro: R${dinheiro:.2f} \n") 
-            print(figuras_choice, "\n\n" , mensagem)
-            
-            resposta = input("deseja jogar novamente? ( s / n / status ) ")
-
-            
-            match(resposta.lower()):
-                case "s":
-                    os.system("cls")
-                    gamble()
-                case "status":
-                    mostrar_status()
-                case "n":
-                    print("fim do programa!")
-                case _:
-                    os.system("cls")
-                    print("digite uma resposta valida!\n")
-                    gamble()
+                os.system("cls")
+                print("fim de jogo")
 
         case "n":
             print("fim do programa\n")
